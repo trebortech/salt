@@ -820,7 +820,7 @@ def wait_for_winexesvc(host, port, username, password, timeout=900):
             )
 
 
-def wait_for_winrm(host, port, username, password, server_cert_validation=True, timeout=900):
+def wait_for_winrm(host, port, username, password, server_cert_validation='validate', timeout=900):
     '''
     Wait until WinRM connection can be established.
     '''
@@ -834,7 +834,8 @@ def wait_for_winrm(host, port, username, password, server_cert_validation=True, 
     while True:
         trycount += 1
         try:
-            s = winrm.Session(host, auth=(username, password), server_cert_validation, transport='ssl')
+            s = winrm.Session(host, auth=(username, password),
+                              server_cert_validation=server_cert_validation, transport='ssl')
             if hasattr(s.protocol, 'set_timeout'):
                 s.protocol.set_timeout(15)
             log.trace('WinRM endpoint url: {0}'.format(s.url))
